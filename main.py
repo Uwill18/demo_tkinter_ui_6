@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-
+import functools
 
 root = Tk()
 root.title('Codemy.com - TreeView')
@@ -9,19 +9,19 @@ root.geometry("500x800")
 
 # Add some style
 style = ttk.Style()
-#Pick a theme
+# Pick a theme
 style.theme_use("default")
 # Configure our treeview colors
 
-style.configure("Treeview", 
-	background="#D3D3D3",
-	foreground="black",
-	rowheight=25,
-	fieldbackground="#D3D3D3"
-	)
+style.configure("Treeview",
+                background="#D3D3D3",
+                foreground="black",
+                rowheight=25,
+                fieldbackground="#D3D3D3"
+                )
 # Change selected color
-style.map('Treeview', 
-	background=[('selected', 'blue')])
+style.map('Treeview',
+          background=[('selected', 'blue')])
 
 # Create Treeview Frame
 tree_frame = Frame(root)
@@ -36,7 +36,7 @@ my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode="e
 # Pack to the screen
 my_tree.pack()
 
-#Configure the scrollbar
+# Configure the scrollbar
 tree_scroll.config(command=my_tree.yview)
 
 # Define Our Columns
@@ -54,36 +54,35 @@ my_tree.heading("Name", text="Name", anchor=W)
 my_tree.heading("ID", text="ID", anchor=CENTER)
 my_tree.heading("Favorite Pizza", text="Favorite Pizza", anchor=W)
 
-
-#could think of table as list of lists
-#data[names[i], ids[i], toppigs[i]]
+# could think of table as list of lists
+# data[names[i], ids[i], toppigs[i]]
 # Add Data
 data = [
-	["John", 1, "Pepperoni"],
-	["Mary", 2, "Cheese"],
-	["Tim", 3, "Mushroom"],
-	["Erin", 4, "Ham"],
-	["Bob", 5, "Onion"],
-	["Steve", 6, "Peppers"],
-	["Tina", 7, "Cheese"],
-	["Mark", 8, "Supreme"],
-	["John", 1, "Pepperoni"],
-	["Mary", 2, "Cheese"],
-	["Tim", 3, "Mushroom"],
-	["Erin", 4, "Ham"],
-	["Bob", 5, "Onion"],
-	["Steve", 6, "Peppers"],
-	["Tina", 7, "Cheese"],
-	["Mark", 8, "Supreme"],
-	["John", 1, "Pepperoni"],
-	["Mary", 2, "Cheese"],
-	["Tim", 3, "Mushroom"],
-	["Erin", 4, "Ham"],
-	["Bob", 5, "Onion"],
-	["Steve", 6, "Peppers"],
-	["Tina", 7, "Cheese"],
-	["Mark", 8, "Supreme"],
-	["Ruth", 9, "Vegan"]
+    ["John", 1, "Pepperoni"],
+    ["Mary", 2, "Cheese"],
+    ["Tim", 3, "Mushroom"],
+    ["Erin", 4, "Ham"],
+    ["Bob", 5, "Onion"],
+    ["Steve", 6, "Peppers"],
+    ["Tina", 7, "Cheese"],
+    ["Mark", 8, "Supreme"],
+    ["John", 1, "Pepperoni"],
+    ["Mary", 2, "Cheese"],
+    ["Tim", 3, "Mushroom"],
+    ["Erin", 4, "Ham"],
+    ["Bob", 5, "Onion"],
+    ["Steve", 6, "Peppers"],
+    ["Tina", 7, "Cheese"],
+    ["Mark", 8, "Supreme"],
+    ["John", 1, "Pepperoni"],
+    ["Mary", 2, "Cheese"],
+    ["Tim", 3, "Mushroom"],
+    ["Erin", 4, "Ham"],
+    ["Bob", 5, "Onion"],
+    ["Steve", 6, "Peppers"],
+    ["Tina", 7, "Cheese"],
+    ["Mark", 8, "Supreme"],
+    ["Ruth", 9, "Vegan"]
 ]
 
 # Create striped row tags
@@ -91,16 +90,17 @@ my_tree.tag_configure('oddrow', background="white")
 my_tree.tag_configure('evenrow', background="lightblue")
 
 global count
-count=0
+count = 0
 
 for record in data:
-	if count % 2 == 0:
-		my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2]), tags=('evenrow',))
-	else:
-		my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2]), tags=('oddrow',))
+    if count % 2 == 0:
+        my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2]),
+                       tags=('evenrow',))
+    else:
+        my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2]),
+                       tags=('oddrow',))
 
-	count += 1
-
+    count += 1
 
 '''
 my_tree.insert(parent='', index='end', iid=0, text="", values=("John", 1, "Peperroni"))
@@ -110,16 +110,69 @@ my_tree.insert(parent='', index='end', iid=3, text="", values=("Bob", "4", "Supr
 my_tree.insert(parent='', index='end', iid=4, text="", values=("Erin", "5", "Cheese"))
 my_tree.insert(parent='', index='end', iid=5, text="", values=("Wes", "6", "Onion"))
 '''
-# add child
-#my_tree.insert(parent='', index='end', iid=6, text="Child", values=("Steve", "1.2", "Peppers"))
-#my_tree.move('6', '0', '0')
 
+
+# add child
+# my_tree.insert(parent='', index='end', iid=6, text="Child", values=("Steve", "1.2", "Peppers"))
+# my_tree.move('6', '0', '0')
+
+# # Update the listbox
+# def update(tree_data):
+#     # Clear the listbox
+#     my_tree.delete()
+#
+#     rowcount = 0
+#     # Add toppings to listbox
+#     for item in tree_data:
+#         if rowcount % 2 == 0:
+#             my_tree.insert(parent='', index='end', iid=rowcount, text="", values=(item[0], item[1], item[2]),
+#                            tags=('evenrow',))
+#         else:
+#             my_tree.insert(parent='', index='end', iid=rowcount, text="", values=(item[0], item[1], item[2]),
+#                            tags=('oddrow',))
+#
+#         rowcount += 1
+    #     my_tree.insert(parent='', index='end', text="", values=(item[0], item[1], item[2]))
+    # res1 = functools.reduce(lambda x, y: x or y, [tree_data in sublist for sublist in data])
+    # print(res1)
+
+
+# Update entry box with listbox clicked
+
+
+# Create function to check entry vs listbox
+def check(e):
+    # grab what was typed
+    typed = name_box.get()
+    # typed = time_entry.get()
+    # later test if getting values can all update the same view
+
+    if typed == '':
+        # empty tableview, and add all records
+        tree_data = data
+    else:
+        tree_data = []
+        # clear tableview
+        for item in data:
+            # search tableview, and add records where the item is in the list of lists
+            # if typed.lower() in item.lower():
+            data.append(item)
+
+    # update our listbox with selected items
+    # update(tree_data)
+
+
+# # Add the toppings to our list
+# update(my_tree)
+
+# Create a binding on the listbox onclick
+# my_list.bind("<<ListboxSelect>>", fillout)
 
 
 add_frame = Frame(root)
 add_frame.pack(pady=20)
 
-#Labels
+# Labels
 nl = Label(add_frame, text="Name")
 nl.grid(row=0, column=0)
 
@@ -129,9 +182,12 @@ il.grid(row=0, column=1)
 tl = Label(add_frame, text="Topping")
 tl.grid(row=0, column=2)
 
-#Entry boxes
+# Entry boxes
 name_box = Entry(add_frame)
 name_box.grid(row=1, column=0)
+
+# Create a binding on the entry box
+# name_box.bind("<KeyRelease>", check)
 
 id_box = Entry(add_frame)
 id_box.grid(row=1, column=1)
@@ -139,91 +195,100 @@ id_box.grid(row=1, column=1)
 topping_box = Entry(add_frame)
 topping_box.grid(row=1, column=2)
 
+
 # Add Record
 def add_record():
-	my_tree.tag_configure('oddrow', background="white")
-	my_tree.tag_configure('evenrow', background="lightblue")
+    my_tree.tag_configure('oddrow', background="white")
+    my_tree.tag_configure('evenrow', background="lightblue")
 
-	global count
-	if count % 2 == 0:
-		my_tree.insert(parent='', index='end', iid=count, text="", values=(name_box.get(), id_box.get(), topping_box.get()), tags=('evenrow',))
-	else:
-		my_tree.insert(parent='', index='end', iid=count, text="", values=(name_box.get(), id_box.get(), topping_box.get()), tags=('oddrow',))
+    global count
+    if count % 2 == 0:
+        my_tree.insert(parent='', index='end', iid=count, text="",
+                       values=(name_box.get(), id_box.get(), topping_box.get()), tags=('evenrow',))
+    else:
+        my_tree.insert(parent='', index='end', iid=count, text="",
+                       values=(name_box.get(), id_box.get(), topping_box.get()), tags=('oddrow',))
 
-	count += 1
+    count += 1
 
-	# Clear the boxes
-	name_box.delete(0, END)
-	id_box.delete(0, END)
-	topping_box.delete(0, END)
+    # Clear the boxes
+    name_box.delete(0, END)
+    id_box.delete(0, END)
+    topping_box.delete(0, END)
+
 
 # Remove all records
 def remove_all():
-	for record in my_tree.get_children():
-		my_tree.delete(record)
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+
 
 # Remove one selected
 def remove_one():
-	x = my_tree.selection()[0]
-	my_tree.delete(x)
+    x = my_tree.selection()[0]
+    my_tree.delete(x)
+
 
 # Remove many selected
 def remove_many():
-	x = my_tree.selection()
-	for record in x:
-		my_tree.delete(record)
+    x = my_tree.selection()
+    for record in x:
+        my_tree.delete(record)
+
 
 # Select Record
 def select_record():
-	# Clear entry boxes
-	name_box.delete(0, END)
-	id_box.delete(0, END)
-	topping_box.delete(0, END)
+    # Clear entry boxes
+    name_box.delete(0, END)
+    id_box.delete(0, END)
+    topping_box.delete(0, END)
 
-	# Grab record number
-	selected = my_tree.focus()
-	# Grab record values
-	values = my_tree.item(selected, 'values')
+    # Grab record number
+    selected = my_tree.focus()
+    # Grab record values
+    values = my_tree.item(selected, 'values')
 
-	#temp_label.config(text=values[0])
+    # temp_label.config(text=values[0])
 
-	# output to entry boxes
-	name_box.insert(0, values[0])
-	id_box.insert(0, values[1])
-	topping_box.insert(0, values[2])
+    # output to entry boxes
+    name_box.insert(0, values[0])
+    id_box.insert(0, values[1])
+    topping_box.insert(0, values[2])
 
 
 # Save updated record
 def update_record():
-	# Grab record number
-	selected = my_tree.focus()
-	# Save new data
-	my_tree.item(selected, text="", values=(name_box.get(), id_box.get(), topping_box.get()))
+    # Grab record number
+    selected = my_tree.focus()
+    # Save new data
+    my_tree.item(selected, text="", values=(name_box.get(), id_box.get(), topping_box.get()))
 
-	# Clear entry boxes
-	name_box.delete(0, END)
-	id_box.delete(0, END)
-	topping_box.delete(0, END)
+    # Clear entry boxes
+    name_box.delete(0, END)
+    id_box.delete(0, END)
+    topping_box.delete(0, END)
+
 
 # Create Binding Click function
 def clicker(e):
-	select_record()
+    select_record()
+
 
 # Move Row up
 def up():
-	rows = my_tree.selection()
-	for row in rows:
-		my_tree.move(row, my_tree.parent(row), my_tree.index(row)-1)
+    rows = my_tree.selection()
+    for row in rows:
+        my_tree.move(row, my_tree.parent(row), my_tree.index(row) - 1)
+
 
 # Move Row Down
 def down():
-	rows = my_tree.selection()
-	for row in reversed(rows):
-		my_tree.move(row, my_tree.parent(row), my_tree.index(row)+1)
+    rows = my_tree.selection()
+    for row in reversed(rows):
+        my_tree.move(row, my_tree.parent(row), my_tree.index(row) + 1)
 
 
-
-#Buttons
+# Buttons
 move_up = Button(root, text="Move Up", command=up)
 move_up.pack(pady=20)
 
@@ -254,8 +319,7 @@ temp_label = Label(root, text="")
 temp_label.pack(pady=20)
 
 # Bindings
-#my_tree.bind("<Double-1>", clicker)
+# my_tree.bind("<Double-1>", clicker)
 my_tree.bind("<ButtonRelease-1>", clicker)
-
 
 root.mainloop()
